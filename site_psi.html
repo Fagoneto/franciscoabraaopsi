@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Francisco Abraão | Psicanálise</title>
+  <meta name="description" content="Atendimentos presenciais e on-line em psicanálise. Dispositivos de escuta e reflexão em grupo." />
+
+  <style>
+    :root{
+      --bg: #f4efe4;
+      --paper: #f7f2e8;
+      --ink: #1f2a27;
+      --muted: #5a625f;
+      --green: #6f8a7b;
+      --green-2: #9fb6a9;
+      --line: rgba(31,42,39,.14);
+
+      --serif: Georgia, "Times New Roman", Times, serif;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(0,0,0,.06);
+      --shadow-soft: 0 8px 18px rgba(0,0,0,.05);
+      --maxw: 1060px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      color:var(--ink);
+      background:var(--bg);
+      font-family:var(--sans);
+      line-height:1.6;
+      letter-spacing:.1px;
+    }
+
+    /* Fundo “aquarela” */
+    .wash{
+      position: fixed;
+      inset: -40px;
+      pointer-events: none;
+      z-index: -2;
+      background:
+        radial-gradient(900px 520px at 10% 12%, rgba(111,138,123,.55), transparent 62%),
+        radial-gradient(720px 460px at 36% 2%, rgba(159,182,169,.26), transparent 60%),
+        radial-gradient(980px 620px at 92% 18%, rgba(159,182,169,.20), transparent 62%),
+        radial-gradient(900px 700px at 86% 72%, rgba(111,138,123,.14), transparent 66%),
+        linear-gradient(180deg, rgba(111,138,123,.14), transparent 46%);
+      opacity: .95;
+    }
+    .wash::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      opacity:.12;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      background-size: 320px 320px;
+      pointer-events:none;
+    }
+
+    /* Grão */
+    .grain{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: .16;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='420' height='420' filter='url(%23n)' opacity='.40'/%3E%3C/svg%3E");
+      background-size: 420px 420px;
+    }
+
+    /* Layout wrapper */
+    .wrap{
+      width: min(var(--maxw), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: underline; text-underline-offset: 3px; }
+
+    /* Header */
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      background: color-mix(in srgb, var(--bg) 70%, transparent);
+      border-bottom: 1px solid rgba(31,42,39,.08);
+    }
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding:14px 0;
+    }
+    .brand{
+      display:flex;
+      align-items:baseline;
+      gap:14px;
+      min-width:240px;
+    }
+    .brand .name{
+      font-family: var(--serif);
+      font-size: 20px;
+      letter-spacing: .6px;
+    }
+    .brand .role{
+      font-family: var(--serif);
+      font-size: 18px;
+      color: var(--muted);
+    }
+    nav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      height:34px;
+      padding:0 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in srgb, var(--paper) 92%, transparent);
+      box-shadow: var(--shadow-soft);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .pill:hover{ text-decoration:none; border-color: rgba(31,42,39,.26); }
+
+    /* HERO */
+    .hero{ padding: 60px 0 30px; }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap:34px;
+      align-items:center;
+    }
+    .hero h1{
+      margin:0;
+      font-family:var(--serif);
+      font-weight:600;
+      letter-spacing:1.8px;
+      font-size:44px;
+    }
+    .hero .subtitle{
+      margin-top:12px;
+      max-width:46ch;
+      color:var(--muted);
+      font-size:16px;
+    }
+    .cta-row{
+      margin-top:22px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      height:42px;
+      padding:0 18px;
+      border-radius:999px;
+      border:1px solid rgba(31,42,39,.22);
+      background: rgba(255,255,255,.45);
+      box-shadow: var(--shadow);
+      font-size: 14px;
+      text-decoration:none !important;
+    }
+    .btn.primary{
+      border-color: rgba(111,138,123,.55);
+      background: color-mix(in srgb, rgba(111,138,123,.22) 70%, rgba(255,255,255,.6));
+    }
+    .btn:hover{ border-color: rgba(31,42,39,.34); }
+
+    .hero-card{
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: radial-gradient(circle at 30% 35%, rgba(111,138,123,.32), transparent 62%);
+      box-shadow: var(--shadow);
+      padding:24px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-card:before{
+      content:"";
+      position:absolute;
+      inset:-40px -90px auto auto;
+      width:260px;
+      height:260px;
+      border-radius:999px;
+      background: radial-gradient(circle at 30% 35%, rgba(111,138,123,.25), transparent 60%);
+      transform: rotate(12deg);
+      opacity:.9;
+    }
+    .quote{
+      margin:0;
+      position:relative;
+      font-family: var(--serif);
+      font-size:22px;
+      letter-spacing:.8px;
+      line-height:1.35;
+    }
+    .quote small{
+      display:block;
+      margin-top:10px;
+      font-family: var(--sans);
+      font-size:13px;
+      color: var(--muted);
+      letter-spacing:.2px;
+    }
+
+    /* Divisor */
+    .divider{
+      height:1px;
+      background: linear-gradient(to right, transparent, rgba(31,42,39,.18), transparent);
+      margin:26px 0;
+      position:relative;
+    }
+    .divider:after{
+      content:"";
+      position:absolute;
+      inset:-10px 0 auto 0;
+      height:22px;
+      background:
+        radial-gradient(36px 10px at 18% 50%, rgba(111,138,123,.28), transparent 70%),
+        radial-gradient(52px 12px at 62% 50%, rgba(159,182,169,.22), transparent 70%),
+        radial-gradient(42px 10px at 86% 50%, rgba(111,138,123,.16), transparent 70%);
+      opacity:.9;
+      pointer-events:none;
+    }
+
+    section{ padding:30px 0; }
+    .section-title{
+      font-family: var(--serif);
+      letter-spacing: 1.2px;
+      font-size: 26px;
+      margin: 0 0 12px 0;
+    }
+    .section-subtitle{
+      margin: 0 0 18px 0;
+      color: var(--muted);
+      max-width: 70ch;
+      font-size: 15px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+    }
+    .grid-3{
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 860px){
+      .grid-3{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.30);
+      box-shadow: var(--shadow-soft);
+      padding: 20px;
+    }
+    .card h3{
+      margin:0 0 10px 0;
+      font-family: var(--serif);
+      letter-spacing:.8px;
+      font-size:18px;
+      font-weight:600;
+    }
+    .card p{ margin:0; color:var(--muted); font-size:14px; }
+
+    .prose{ max-width:78ch; color:var(--ink); font-size:16px; }
+    .prose p{ margin:0 0 12px 0; }
+    .prose p:last-child{ margin-bottom:0; }
+
+    .list{
+      margin: 10px 0 0 0;
+      padding-left: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .list li{ margin:6px 0; }
+
+    .about{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:18px;
+      align-items:start;
+    }
+    .portrait{
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.28);
+      box-shadow: var(--shadow-soft);
+      padding: 16px;
+    }
+    .portrait small{
+      display:block;
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .contact{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .kv{
+      display:grid;
+      gap:10px;
+      font-size:14px;
+      color:var(--muted);
+    }
+    .kv b{ color: var(--ink); font-weight:600; }
+
+    footer{
+      padding: 30px 0 46px;
+      color: var(--muted);
+      font-size: 12px;
+      border-top: 1px solid var(--line);
+      margin-top: 34px;
+    }
+
+    /* WhatsApp flutuante */
+    .float{
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 60;
+    }
+    .float a{
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(31,42,39,.22);
+      background: color-mix(in srgb, rgba(111,138,123,.25) 65%, rgba(255,255,255,.55));
+      box-shadow: var(--shadow);
+      text-decoration:none !important;
+    }
+    .float svg{ width:22px; height:22px; opacity:.9; }
+
+    /* ===== TREPADEIRA (VINE) ===== */
+    .vine{
+      position: fixed;
+      right: -14px;
+      top: 92px;
+      width: 220px;
+      height: calc(100vh - 120px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: .14;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.05));
+      transform-origin: 90% 30%;
+      animation: sway 10s ease-in-out infinite;
+    }
+    .vine path{
+      stroke: rgba(111,138,123,.55);
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .vine .leaf{
+      fill: rgba(111,138,123,.20);
+      stroke: rgba(111,138,123,.35);
+      stroke-width: 1;
+    }
+    @keyframes sway{
+      0%,100%{ transform: rotate(-.4deg) translateY(0); }
+      50%    { transform: rotate(.6deg)  translateY(3px); }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .vine{ animation: none; }
+    }
+
+    /* Responsive */
+    @media (max-width: 860px){
+      .hero-grid{ grid-template-columns:1fr; }
+      .grid{ grid-template-columns:1fr; }
+      .about{ grid-template-columns:1fr; }
+      .contact{ grid-template-columns:1fr; }
+      .hero h1{ font-size:38px; }
+      nav{ justify-content:flex-start; }
+      .brand{ min-width: unset; }
+      .vine{ display:none; }
+    }
+
+    .group-mark{
+      margin: 14px 0 0;
+      height: 54px;
+      width: min(520px, 100%);
+      opacity: .55;
+    }
+    .group-mark path{
+      stroke: rgba(111,138,123,.55);
+      stroke-width: 2.2;
+      fill: none;
+      stroke-linecap: round;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Fundo -->
+  <div class="wash" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+
+  <!-- Trepadeira (bem discreta) -->
+  <svg class="vine" viewBox="0 0 220 900" aria-hidden="true">
+    <path d="M140 10 C170 80, 120 150, 170 230 C210 320, 140 400, 180 500 C220 610, 150 700, 170 890"/>
+    <path class="leaf" d="M150 150 C165 138, 180 145, 186 160 C175 170, 160 170, 150 150 Z"/>
+    <path class="leaf" d="M175 320 C190 308, 205 316, 210 332 C198 344, 184 342, 175 320 Z"/>
+    <path class="leaf" d="M160 540 C175 528, 190 536, 195 552 C184 564, 170 562, 160 540 Z"/>
+    <path class="leaf" d="M178 720 C192 708, 207 715, 212 730 C200 744, 186 742, 178 720 Z"/>
+  </svg>
+
+  <header>
+    <div class="wrap topbar">
+      <div class="brand">
+        <div class="name">Francisco Abraão</div>
+        <div class="role">Psicanálise</div>
+      </div>
+
+      <nav aria-label="Navegação">
+        <a class="pill" href="#escuta">A escuta</a>
+        <a class="pill" href="#modalidades">Atendimentos</a>
+        <a class="pill" href="#grupos">Grupo</a>
+        <a class="pill" href="#sobre">Sobre</a>
+        <a class="pill" href="#contato">Contato</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <h1>Francisco Abraão</h1>
+          <div class="subtitle">
+            Atendimentos individuais, familiares e dispositivos de escuta e reflexão em grupo —
+            presenciais e on-line.
+          </div>
+
+          <div class="cta-row">
+            <a class="btn primary" href="https://wa.me/5561993553849?text=Olá,%20Francisco.%20Gostaria%20de%20conversar%20sobre%20atendimento." target="_blank" rel="noopener">
+              Entrar em contato
+            </a>
+            <a class="btn" href="#modalidades">Ver modalidades</a>
+          </div>
+        </div>
+
+        <aside class="hero-card" aria-label="Enquadramento">
+          <p class="quote">
+            Quando tudo parece caótico ou assustador, uma escuta pode ser o começo.
+            <small>A psicanálise não oferece respostas prontas — mas convida à palavra, e ao tempo da elaboração.</small>
+          </p>
+        </aside>
+      </div>
+
+      <div class="wrap">
+        <div class="divider" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- ESCUTA -->
+    <section id="escuta">
+      <div class="wrap">
+        <h2 class="section-title">A escuta</h2>
+        <p class="section-subtitle">Um espaço para que a palavra possa circular com cuidado, sem pressa e sem fórmulas.</p>
+
+        <div class="card">
+          <div class="prose">
+            <p>Muitas vezes, a decisão de iniciar uma análise surge quando algo insiste em se repetir — ou quando já não é possível seguir como antes.</p>
+            <p>A psicanálise não oferece respostas prontas. Não se trata de corrigir, orientar ou adaptar, mas de escutar.</p>
+            <p>De abrir espaço para o que ainda não foi dito — ou para aquilo que nunca pôde ser escutado.</p>
+            <p>Meu trabalho é sustentar um espaço de escuta ética, confidencial e respeitosa, onde a palavra possa circular sem julgamento, sem pressa e sem fórmulas.</p>
+          </div>
+        </div>
+
+        <div class="divider" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section id="modalidades">
+      <div class="wrap">
+        <h2 class="section-title">Atendimentos</h2>
+        <p class="section-subtitle">Presencial em Brasília e on-line para pessoas no Brasil e no exterior.</p>
+
+        <div class="grid grid-3">
+          <div class="card">
+            <h3>Individual</h3>
+            <p>Um espaço de fala e escuta sustentado por um enquadre ético e confidencial, no tempo próprio de cada processo.</p>
+          </div>
+
+          <div class="card">
+            <h3>Familiar</h3>
+            <p>Quando o sofrimento atravessa vínculos e convivências, o atendimento pode oferecer um lugar para nomear impasses e recolocar a palavra no laço.</p>
+          </div>
+
+          <div class="card">
+            <h3>Escuta e Reflexão em Grupo</h3>
+            <p>Um dispositivo de palavra para elaborar experiências coletivas, com cuidado de enquadre, respeito ao silêncio e foco na experiência do próprio grupo.</p>
+          </div>
+        </div>
+
+        <div class="divider" aria-hidden="true"></div>
+      </div>
+    </section>
+
+
+
+
+    <!-- GRUPOS -->
+    <section id="grupos">
+      <div class="wrap">
+        <h2 class="section-title">Escuta e Reflexão em Grupo</h2>
+        <p class="section-subtitle">Um dispositivo de palavra para elaborar experiências coletivas.</p>
+
+        <svg class="group-mark" viewBox="0 0 520 60" aria-hidden="true">
+          <path d="M10 30 C80 8, 120 52, 170 30 C220 8, 260 52, 310 30 C360 8, 400 52, 510 30"/>
+          <path d="M10 30 C80 52, 120 8, 170 30 C220 52, 260 8, 310 30 C360 52, 400 8, 510 30"/>
+        </svg>
+
+        <div class="card">
+          <div class="prose">
+            <p>Há momentos em que o sofrimento não aparece apenas como questão individual, mas como algo que atravessa vínculos, equipes e coletivos — e que, muitas vezes, se manifesta como tensão, repetição de conflitos, sensação de esgotamento ou perda de sentido.</p>
+            <p>A proposta de escuta e reflexão em grupo não busca oferecer soluções imediatas, nem funcionar como treinamento, palestra motivacional ou espaço de avaliação. Trata-se de criar condições para que a palavra circule de forma cuidadosa e horizontal, permitindo que aquilo que está “travado” no coletivo possa ser nomeado e elaborado.</p>
+            <p>Quando a palavra circula, algo do laço se reorganiza: o que antes aparecia apenas como queixa dispersa pode ganhar forma, e o que parecia apenas individual pode ser recolocado no campo das relações.</p>
+            <p>O trabalho se sustenta em três princípios simples:</p>
+            <ul class="list">
+              <li><b>Cuidado com o enquadre</b> (tempo, regras mínimas e confidencialidade)</li>
+              <li><b>Respeito ao silêncio</b> (ninguém é obrigado a falar)</li>
+              <li><b>Foco na experiência</b> (o saber emerge do próprio grupo)</li>
+            </ul>
+            <p style="margin-top:12px;">Esses encontros podem ser realizados com diferentes composições — grupos abertos, grupos de equipe, coletivos institucionais ou grupos temáticos — de forma presencial ou on-line, conforme a necessidade e a realidade de cada contexto.</p>
+            <p>Se houver interesse, podemos conversar para definir o formato mais adequado e o modo de início.</p>
+
+            <div class="cta-row">
+              <a class="btn primary" href="https://wa.me/5561993553849?text=Olá,%20Francisco.%20Tenho%20interesse%20em%20escuta%20e%20reflexão%20em%20grupo%20e%20gostaria%20de%20conversar%20sobre%20formato." target="_blank" rel="noopener">
+                Agendar conversa inicial
+              </a>
+              <a class="btn" href="#contato">Ver contato</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section id="sobre">
+      <div class="wrap">
+        <h2 class="section-title">Sobre</h2>
+        <p class="section-subtitle">Formação e atuação.</p>
+
+        <div class="about">
+          <div class="card">
+            <div class="prose">
+              <p>Sou psicanalista, formado pelo Centro de Estudos Psicanalíticos (CEP – São Paulo).</p>
+              <p>Integro o Núcleo de Acesso do Instituto Sedes Sapientiae, com atuação junto a lideranças do MST e MTST, e realizo trabalho voluntário no Hospital Universitário de Brasília.</p>
+              <p>Tenho interesse nas questões de família, gênero, política e nos modos contemporâneos de manifestação do sofrimento psíquico.</p>
+            </div>
+          </div>
+
+          <aside class="portrait" aria-label="Foto">
+            <img
+              src="3x4.png"
+              alt="Francisco Abraão"
+              style="
+                width: 100%;
+                max-width: 260px;
+                display: block;
+                margin: 6px auto 10px;
+                border-radius: 999px;
+                border: 1px solid rgba(31,42,39,.18);
+                box-shadow: 0 10px 30px rgba(0,0,0,.08);
+              "
+            />
+            <small>Presencial em Brasília · On-line para Brasil e exterior</small>
+          </aside>
+        </div>
+
+        <div class="divider" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato">
+      <div class="wrap">
+        <h2 class="section-title">Contato</h2>
+        <p class="section-subtitle">Para agendamentos e conversas iniciais.</p>
+
+        <div class="contact">
+          <div class="card">
+            <div class="kv">
+              <div><b>WhatsApp</b>: <a href="https://wa.me/5561993553849" target="_blank" rel="noopener">(61) 99355-3849</a></div>
+              <div><b>E-mail</b>: <a href="mailto:franciscoabraao.psi@gmail.com">franciscoabraao.psi@gmail.com</a></div>
+              <div><b>Instagram</b>: <a href="https://www.instagram.com/franciscoabraaopsi/" target="_blank" rel="noopener">@franciscoabraaopsi</a></div>
+              <div><b>Site</b>: <span style="color:var(--ink)">www.franciscoabraaopsi.com.br</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Mensagem</h3>
+            <p>Se preferir, clique no botão abaixo e me envie uma mensagem curta sobre sua busca (individual, familiar ou grupo). Eu retorno com orientações de horário e formato.</p>
+            <div class="cta-row">
+              <a class="btn primary" href="https://wa.me/5561993553849?text=Olá,%20Francisco.%20Gostaria%20de%20conversar%20sobre%20(INDIVIDUAL/FAMÍLIA/GRUPO)." target="_blank" rel="noopener">
+                Enviar mensagem
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">
+        <div>© <span id="y"></span> Francisco Abraão — Psicanálise.</div>
+        <div style="margin-top:6px;">Atendimentos presenciais e on-line. Dispositivos de escuta e reflexão em grupo.</div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- WhatsApp flutuante -->
+  <div class="float" aria-label="WhatsApp">
+    <a href="https://wa.me/5561993553849?text=Olá,%20Francisco.%20Gostaria%20de%20conversar%20sobre%20atendimento." target="_blank" rel="noopener" title="WhatsApp">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M20 11.7a8 8 0 0 1-11.7 7L4 20l1.4-4.1A8 8 0 1 1 20 11.7Z" stroke="rgba(31,42,39,.85)" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M9.4 8.9c.2-.5.4-.5.6-.5h.6c.2 0 .5.1.6.4l.7 1.6c.1.3.1.5 0 .7l-.3.5c-.1.2-.1.4 0 .6.3.6 1.1 1.6 2.4 2.1.2.1.4.1.6-.1l.5-.6c.2-.2.4-.3.7-.2l1.7.6c.3.1.4.3.4.6 0 .6-.3 1.5-1 1.8-.7.3-1.7.4-3.7-.5-1.9-.9-3.3-2.7-3.8-3.5-.5-.8-1.2-2.3-.5-3.6Z" fill="rgba(31,42,39,.78)"/>
+      </svg>
+    </a>
+  </div>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
